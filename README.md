@@ -1,0 +1,2 @@
+# site-scraper
+Tool for scraping sitemap.xml and pulling the content into a directory structure.
