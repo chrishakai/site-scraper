@@ -5,7 +5,7 @@ import re
 import time
 import urllib2,cookielib
 from bs4 import BeautifulSoup, SoupStrainer
-
+from clean_paste import *
 sitemap= 'https://www.hakaimagazine.com/sitemap.xml'
 #sitemap= 'http://localhost/sitemap_one.xml'
 hdr = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.64 Safari/537.11',
@@ -39,7 +39,6 @@ for idx, link in enumerate(links):
     if not os.path.exists(directory):
         os.makedirs(directory)
 
-
     print '\033[92m' + 'Starting page ' + directory + '\033[0m'
 
     # Request the page
@@ -51,9 +50,15 @@ for idx, link in enumerate(links):
 
         # Write the file
         contents = open(directory + '/contents.html', 'w')
-        contents.write(htmlpage)
+        pagecontents = ''
+        if m.group(1) == 'article-long':
+            pagecontents += '<custom tag>\n'
+            pagecontents += clean_paste(htmlpage)
+
+        pagecontents += clean_paste(htmlpage)
+        contents.write(pagecontents)
         contents.close()
-        print 'Write file ' + '\033[94m' + directory + '/contents.html' + '\033[0m' + ': ' + '\033[93m' + htmlpage[:15] + '...' + '\033[0m'
+        print 'Write file ' + '\033[94m' + directory + '/contents.xml' + '\033[0m' + ': ' + '\033[93m' + pagecontents[:15] + '...' + '\033[0m'
 
         # Request source images
         imglinks = soup.find_all('source')
