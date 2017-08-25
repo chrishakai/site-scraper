@@ -49,11 +49,11 @@ for idx, link in enumerate(links):
         soup = BeautifulSoup(htmlpage, 'html.parser')
 
         # Write the file
-        contents = open(directory + '/contents.html', 'w')
+        contents = open(directory + '/contents.xml', 'w')
         pagecontents = ''
-        if m.group(1) == 'article-long':
-            pagecontents += '<custom tag>\n'
-            pagecontents += clean_paste(htmlpage)
+        # if m.group(1) == 'article-long':
+        #     pagecontents += '<custom tag>\n'
+        #     pagecontents += clean_paste(htmlpage)
 
         pagecontents += clean_paste(htmlpage)
         contents.write(pagecontents)
