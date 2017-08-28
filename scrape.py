@@ -6,8 +6,8 @@ import time
 import urllib2,cookielib
 from bs4 import BeautifulSoup, SoupStrainer
 from clean_paste import *
-sitemap= 'https://www.hakaimagazine.com/sitemap.xml'
-#sitemap= 'http://localhost/sitemap_one.xml'
+#sitemap= 'https://www.hakaimagazine.com/sitemap.xml'
+sitemap= 'http://localhost/sitemap_one.xml'
 hdr = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.64 Safari/537.11',
        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
        'Accept-Charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.3',
@@ -64,7 +64,11 @@ for idx, link in enumerate(links):
         imglinks = soup.find_all('source')
         imgfiles = []
         for image in imglinks:
-            imgname = re.search('https:\/\/www.hakaimagazine.com\/sites\/default\/files\/styles\/[\w]+\/[\w]+\/([-\w.\/]+)', image.get('srcset').split(',')[0])
+            imgsizes = unicode(image.get('srcset')).split(',')
+            if len(imgsizes) > 1:
+                imgname = re.search('https:\/\/www.hakaimagazine.com\/sites\/default\/files\/(?:styles\/)*(?:[\w]+\/)*(?:[\w]+\/)*([-\w.\/]+)', imgsizes[0])
+            else:
+                imgname = re.search('https:\/\/www.hakaimagazine.com\/sites\/default\/files\/(?:styles\/)*(?:[\w]+\/)*(?:[\w]+\/)*([-\w.\/]+)', image.get('src'))
             imgfiles.append(imgname.group(1))
         imgfiles = list(set(imgfiles))
         for image in imgfiles:
